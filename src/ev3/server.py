@@ -1,28 +1,40 @@
 import socket
 
-s = socket.socket()
-print("Socket creado")
-port = 8080
-s.bind(('', port))
-print(f"El socket se creó con puerto: {port}")
-s.listen(4)
-print("El socket está escuchando...")
-client, addr = s.accept()
-print(f"Se conectó a {addr}")
+HOST = "localhost"
+PORT = 8080
 
-def moveUp():
-    return
+# Creación y setup de socket
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+    print("Socket creado")
+    s.bind((HOST, PORT))
+    print(f"El socket se creó con puerto: {PORT}")
+    s.listen(4)
+    print("El socket está escuchando...")
 
-while True:
-    rawByte = client.recv(1)
-    char = rawByte.decode()
+    # Se espera la conexión con el cliente
+    client, addr = s.accept()
+    print(f"Se conectó a {addr}")
 
-    match char:
-        case 'w': 
-            moveUp()
-        case 'q':
-            print("Cerrando conexión...")
-            break
+    # Main loop
+    while True:
+        # Se recibe un byte y se decodifica
+        data = client.recv(1024)
+        char = data.decode()
 
-        case _:
-            print("Tecla no soportada")
+        match char:
+            case 'w': 
+                print('w')
+            case 'a':
+                print('a')
+            case 's':
+                print('s')
+            case 'd':
+                print('d')
+            case 'q':
+                print("Cerrando conexión...")
+                break
+
+            case _:
+                print("Tecla no soportada")
+
+    client.close()
