@@ -18,7 +18,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     # Main loop
     while True:
         # Se recibe un byte y se decodifica
-        data = client.recv(1024)
+        data = client.recv(128)
         char = data.decode()
 
         match char:

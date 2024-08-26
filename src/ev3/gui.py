@@ -1,15 +1,12 @@
-import socket
 from tkinter import *
 from tkinter import ttk
 
-HOST = "localhost"
-PORT = 8080
-
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect((HOST, PORT))
-
 def mandar_input(event):
-    s.sendall(event.keysym.encode())
+    print(":" + event.keysym)
+    
+    
+    
+    
     return
 
 
