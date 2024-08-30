@@ -1,6 +1,4 @@
 import socket
-from tkinter import *
-from tkinter import ttk
 
 def retornar_socket():
     #"192.168.28.123"
