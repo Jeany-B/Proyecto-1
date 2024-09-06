@@ -4,15 +4,28 @@ from tkinter import *
 from tkinter import ttk
 import multiprocessing
 
+def mandar_input(socket_p, mensaje):
+    
+    socket_p.sendall(mensaje)
+    
+    return
+
 def gui_process(queue):
     def check_queue():
         try:
-            # Verifica si hay algún mensaje en la cola
+
+            # Verifica si hay algún mensaje en la cola y se ejecuta la funcion para mandarlo al servidor
             message = queue.get_nowait()
-            label.config(text=f"Mensaje recibido: {message}")
+            mandar_input(socket, message.encode())
+
         except multiprocessing.queues.Empty:
             pass
+
         ventana_principal.after(100, check_queue)
+
+    #Se crea el socket para conectarlo con el servidor y se guarda.
+    socket = client.retornar_socket()
+    print("Socket creado")
 
     #Ventana Principal
     ventana_principal = Tk()
@@ -21,12 +34,8 @@ def gui_process(queue):
     ventana_principal.geometry("800x700")
     ventana_principal.resizable(0, 0)
 
-    #
-    label = Label(ventana_principal, text="Esperando mensaje...")
-    label.pack(padx=20, pady=20)
-
-    #
-    ventana_principal.bind("<Key>", lambda event: mandar_input(event, socket))
+    #Se manda las teclas del teclado si es que son presionadas
+    ventana_principal.bind("<Key>", lambda event: mandar_input(socket, event.keysym.encode()))
 
     # Verificar la cola cada 100 ms
     ventana_principal.after(100, check_queue)
@@ -34,19 +43,12 @@ def gui_process(queue):
     # Ejecutar la ventana
     ventana_principal.mainloop()
 
-def mandar_input(event, socket_p):
-
-    socket_p.sendall(event.keysym.encode())
-    
-    return
-
 if __name__ == "__main__":
 
     # Cola para la comunicación entre procesos
     queue = multiprocessing.Queue()
 
+
     # Crear el proceso de tkinter
     gui_process(queue)
 
-    #Se crea el socket para conectarlo con el servidor y se guarda.
-    socket = client.retornar_socket()
