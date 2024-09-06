@@ -2,22 +2,53 @@ import socket
 import client
 from tkinter import *
 from tkinter import ttk
+import multiprocessing
 
-def mandar_input(event, socket_p):
-
-    socket_p.sendall(event.keysym.encode())
+def mandar_input(socket_p, mensaje):
+    
+    socket_p.sendall(mensaje)
     
     return
 
-socket = client.retornar_socket()
+def gui_process(queue):
+    def check_queue():
+        try:
 
-#Ventana Principal
-ventana_principal = Tk()
-ventana_principal.title("EV3.")
-ventana_principal.config(bg="#FF5757")
-ventana_principal.geometry("800x700")
-ventana_principal.resizable(0, 0)
+            # Verifica si hay algún mensaje en la cola y se ejecuta la funcion para mandarlo al servidor
+            message = queue.get_nowait()
+            mandar_input(socket, message.encode())
 
-ventana_principal.bind("<Key>", lambda event: mandar_input(event, socket))
+        except multiprocessing.queues.Empty:
+            pass
 
-ventana_principal.mainloop()
+        ventana_principal.after(100, check_queue)
+
+    #Se crea el socket para conectarlo con el servidor y se guarda.
+    socket = client.retornar_socket()
+    print("Socket creado")
+
+    #Ventana Principal
+    ventana_principal = Tk()
+    ventana_principal.title("EV3.")
+    ventana_principal.config(bg="#FF5757")
+    ventana_principal.geometry("800x700")
+    ventana_principal.resizable(0, 0)
+
+    #Se manda las teclas del teclado si es que son presionadas
+    ventana_principal.bind("<Key>", lambda event: mandar_input(socket, event.keysym.encode()))
+
+    # Verificar la cola cada 100 ms
+    ventana_principal.after(100, check_queue)
+
+    # Ejecutar la ventana
+    ventana_principal.mainloop()
+
+if __name__ == "__main__":
+
+    # Cola para la comunicación entre procesos
+    queue = multiprocessing.Queue()
+
+
+    # Crear el proceso de tkinter
+    gui_process(queue)
+
