@@ -1,5 +1,5 @@
 import multiprocessing
-from tkinter_process import tkinter_process
+from gui import gui_process
 from pygame_process import pygame_process
 
 if __name__ == "__main__":
@@ -7,7 +7,7 @@ if __name__ == "__main__":
     queue = multiprocessing.Queue()
 
     # Crear los procesos
-    tkinter_p = multiprocessing.Process(target=tkinter_process, args=(queue,))
+    tkinter_p = multiprocessing.Process(target=gui_process, args=(queue,))
     pygame_p = multiprocessing.Process(target=pygame_process, args=(queue,))
 
     # Iniciar los procesos
