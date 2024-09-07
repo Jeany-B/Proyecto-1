@@ -25,6 +25,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         data = client.recv(16)
         key = data.decode()
 
+        #Teclado
         if key == 'w':
             lib.avanzar()
         elif key == 'a':
@@ -35,14 +36,16 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             lib.girar_derecha()
         elif key == 'space':
             lib.hablar()
+        #Mando
         elif key == "ARRIBA":
             lib.avanzar()
         elif key == "IZQUIERDA":
-            print(key)
+            lib.girar_izquierda()
         elif key == "DERECHA":
-            print(key)
+            lib.girar_derecha()
         elif key == "ABAJO":
-            print(key)
+            lib.retroceder()
+            
         elif key == "EQUIS":
             print(key)
         elif key == "O":
@@ -51,6 +54,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             print(key)
         elif key == "TRIANGULO":
             print(key)
+        #Salir
         elif key == 'q':
             print('q')
             break
