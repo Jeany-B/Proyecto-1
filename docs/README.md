@@ -1,6 +1,4 @@
-# Proyecto 1 - Lego Mindstorm EV3
-
-# Título del proyecto y Objetivo general.
+# Proyecto 1 - Lego Mindstorm EV3 - Objetivo General.
 
 ### Definir un proyecto para la realización de un **robot Lego Mindstorm EV3** para la solución de problemas.
 
