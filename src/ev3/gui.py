@@ -34,6 +34,10 @@ def gui_process(queue):
     ventana_principal.geometry("800x700")
     ventana_principal.resizable(0, 0)
 
+    #Label
+    label_movimiento_ev3 = Label(ventana_principal, text="Movimiento EV3.")
+    label_movimiento_ev3.place(x=10, y= 10)
+
     #Se manda las teclas del teclado si es que son presionadas
     ventana_principal.bind("<Key>", lambda event: mandar_input(socket, event.keysym.encode()))
 
@@ -47,7 +51,6 @@ if __name__ == "__main__":
 
     # Cola para la comunicación entre procesos
     queue = multiprocessing.Queue()
-
 
     # Crear el proceso de tkinter
     gui_process(queue)
