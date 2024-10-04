@@ -2,7 +2,7 @@
 # encoding=utf-8
 
 import socket
-import library as lib
+#import library as lib
 
 HOST = ""
 PORT = 8080
@@ -27,24 +27,33 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 
         #Teclado
         if key == 'w':
-            lib.avanzar()
+            #lib.avanzar()
+            print("w")
         elif key == 'a':
-            lib.girar_izquierda()
+            #lib.girar_izquierda()
+            print("a")
         elif key == 's':
-            lib.retroceder()
+            #lib.retroceder()
+            print("s")
         elif key == 'd':
-            lib.girar_derecha()
+            #lib.girar_derecha()
+            print("d")
         elif key == 'space':
-            lib.hablar()
+            #lib.hablar()
+            print("space")
         #Mando
         elif key == "ARRIBA":
-            lib.avanzar()
+            #lib.avanzar()
+            print("ARRIBA")
         elif key == "IZQUIERDA":
-            lib.girar_izquierda()
+            #lib.girar_izquierda()
+            print("IZQ")
         elif key == "DERECHA":
-            lib.girar_derecha()
+            #lib.girar_derecha()
+            print("DEREC")
         elif key == "ABAJO":
-            lib.retroceder()
+            #lib.retroceder()
+            print("ABAJ")
             
         elif key == "EQUIS":
             print(key)
