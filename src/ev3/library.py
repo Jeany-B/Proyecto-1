@@ -2,10 +2,10 @@
 
 from time import sleep
 
-from ev3dev2.motor import LargeMotor, OUTPUT_A, OUTPUT_B, SpeedPercent, MoveTank
-from ev3dev2.sensor import INPUT_1
-from ev3dev2.sensor.lego import TouchSensor
-from ev3dev2.led import Leds
+#from ev3dev2.motor import LargeMotor, OUTPUT_A, OUTPUT_B, SpeedPercent, MoveTank
+#from ev3dev2.sensor import INPUT_1
+#from ev3dev2.sensor.lego import TouchSensor
+#from ev3dev2.led import Leds
 from time import sleep
 
 from ev3dev2.motor import LargeMotor, OUTPUT_A, OUTPUT_B, OUTPUT_C, OUTPUT_D, SpeedPercent, MoveTank, MediumMotor
@@ -18,8 +18,8 @@ TANK_DRIVE = MoveTank(OUTPUT_A, OUTPUT_B)
 
 MOTOR_IZQUIERDO = LargeMotor(OUTPUT_A)
 MOTOR_DERECHO = LargeMotor(OUTPUT_B)
-MOTOR_APRETAR_GARRA = MediumMotor(OUTPUT_C)
-MOTOR_SUBIR_BAJAR = LargeMotor(OUTPUT_D)
+#MOTOR_APRETAR_GARRA = MediumMotor(OUTPUT_C)
+#MOTOR_SUBIR_BAJAR = LargeMotor(OUTPUT_D)
 
 # GARRA = LargeMotor(OUTPUT_C)
 RAPIDO = SpeedPercent(100)
