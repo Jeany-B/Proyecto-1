@@ -1,9 +1,9 @@
 import socket
 
-def retornar_socket():
+def retornar_socket(ip_usuario_p):
     #"192.168.20.123"
     #"localhost"
-    HOST = "localhost"
+    HOST = ip_usuario_p
     PORT = 8080
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
