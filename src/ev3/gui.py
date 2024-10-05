@@ -30,7 +30,7 @@ def gui_process(queue):
 
         ventana_principal.after(100, check_queue)
 
-    def crear_socket():
+    def crear_socket(ip_usuario_p):
 
         global socket
         #boton.config(text="Conectando...", fg="#ffea00", bg="#ffffff")
@@ -41,7 +41,7 @@ def gui_process(queue):
                 
                 print("Creando socket")
                 #Se crea el socket para conectarlo con el servidor y se guarda.
-                socket = client.retornar_socket()
+                socket = client.retornar_socket(ip_usuario_p)
                 print("Socket creado")
 
                 #Se manda las teclas del teclado si es que son presionadas
@@ -134,6 +134,29 @@ def gui_process(queue):
 
             boton_conectar_mando.place(x=419, y=570)
 
+    def ventana_ingresar_ip():
+        #Ventana
+        ventana_ingresar_ip = Toplevel(ventana_principal)
+        ventana_ingresar_ip.title("IP del EV3")
+        ventana_ingresar_ip.geometry("300x300")
+        ventana_ingresar_ip.config(bg="#471717")
+        ventana_ingresar_ip.resizable(0, 0)
+
+        #Variables
+        fuente_ventana_secundaria = font.Font(family="Arial", size=15, weight="bold")
+
+        #Widgets
+        label_ingresar_ip = Label(ventana_ingresar_ip, text="Ingrese la IP del EV3", font=fuente_ventana_secundaria, bg=fondo_color_label, fg=letras_color_label)
+        label_ingresar_ip.place(x=50, y=60)
+
+        ip_usuario = Entry(ventana_ingresar_ip, width=25, font=("Arial", 12), justify="center")
+        ip_usuario.place(x=35, y=120)
+
+        boton_aceptar = Button(ventana_ingresar_ip, text="Aceptar", fg="#009634", bg="#D5FFE4", height=2, width=10, font=("Arial", 9, "bold"), command=lambda: crear_socket(ip_usuario.get()))
+        boton_aceptar.place(x=50, y=180)
+
+        boton_salir = Button(ventana_ingresar_ip, text="Salir", fg="#D70000", bg="#FFDDDD", height=2, width=10, font=("Arial", 9, "bold"), command=lambda: ventana_ingresar_ip.destroy())
+        boton_salir.place(x=175, y=180)
 
 
 
@@ -233,7 +256,7 @@ def gui_process(queue):
     boton_flecha_derecha = Button(ventana_principal, text="→", fg=letras_color_botones, bg=fondo_color_botones, height=2, width=4, font=("Arial", 10, "bold"))
     boton_flecha_derecha.place(x=890, y=300 + mover_conjunto)
 
-    boton_conexion = Button(ventana_principal, text="Conectar", fg="#009634", bg="#D5FFE4", height=2, width=10, font=("Arial", 9, "bold"), command=lambda: crear_socket())
+    boton_conexion = Button(ventana_principal, text="Conectar", fg="#009634", bg="#D5FFE4", height=2, width=10, font=("Arial", 9, "bold"), command=lambda: ventana_ingresar_ip())
     boton_conexion.place(x=618, y=460 + mover_conjunto)
 
     salir = Button(ventana_principal, text="Salir", fg="#D70000", bg="#FFDDDD", height=2, width=10, font=("Arial", 9, "bold"), command=lambda: ventana_principal.destroy())
