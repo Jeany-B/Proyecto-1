@@ -6,70 +6,78 @@ def pygame_process(queue):
     
     pygame.init()
     pygame.joystick.init()
-    joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
-    
-    #Se verifica si ya hay un mando conectado
+
     if pygame.joystick.get_count() == 0:
-        queue.put("Ningun mando conectado")
-        return None
-    
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.JOYDEVICEADDED:
+                    pygame.joystick.init()
+                    print("Mando conectado")
+                    running = False
+                    break
+
     joystick = pygame.joystick.Joystick(0)
 
     running = True
     while running:
-        for event in pygame.event.get():
+        event = pygame.event.wait()
+        print(event)
 
-            if event.type == pygame.QUIT:
-                running = False
-            
-            # Módulo para saber si se desconectó un joystick o se conectó.
-            if event.type == pygame.JOYDEVICEREMOVED:
-                joystick.quit()
-                queue.put("Disconnected")
-            elif event.type == pygame.JOYDEVICEADDED:
-                joystick.init()
-                queue.put("Connected")
+        if event.type == pygame.QUIT:
+            running = False
 
-            #Se reconoce el movimiento con la funcion JOYHBUTTONDOWN (botones principales)
-            if event.type == pygame.JOYBUTTONDOWN:
-                if pygame.joystick.Joystick(0).get_button(0):
-                    print("Down")
-                    queue.put("Down")
+        if event.type == pygame.JOYDEVICEREMOVED:
+            joystick.quit()
+            print("Mando desconectado")
 
-                elif pygame.joystick.Joystick(0).get_button(1):
-                    print("Right")
-                    queue.put("Right")
+        if event.type == pygame.JOYDEVICEADDED:
+            joystick.init()
+            print("Mando conectado")
+        
+        #Se reconoce el movimiento con la funcion JOYHBUTTONDOWN (botones principales)
+        if event.type == pygame.JOYBUTTONDOWN:
+            print("1if")
+            if pygame.joystick.Joystick(0).get_button(0):
+                print("x")
+                #queue.put("EQUIS")
 
-                elif pygame.joystick.Joystick(0).get_button(2):
-                    print("Left")
-                    queue.put("Left")
+            elif pygame.joystick.Joystick(0).get_button(1):
+                print("o")
+                #queue.put("O")
 
-                elif pygame.joystick.Joystick(0).get_button(3):
-                    print("Up")
-                    queue.put("Up")
+            elif pygame.joystick.Joystick(0).get_button(2):
+                print("cua")
+                #queue.put("CUADRADO")
 
-            #Se reconoce el movimiento con la funcion JOYHATMOTION (flechitas)
-            if event.type == pygame.JOYHATMOTION:
-                x, y = event.value
-                #Reconocer qué flecha es.
-                #Izquierda-Derecha
-                if (x == 1):
-                    print("d")
-                    queue.put("d")
-                elif (x == -1):
-                    print("a")
-                    queue.put("a")
-                #Arriba-Abajo
-                elif (y == 1):
-                    print("w")
-                    queue.put("w")
-                elif (y == -1):
-                    print("s")
-                    queue.put("s")
-                else:
-                    #print("Centro")
-                    pass
-                    
+            elif pygame.joystick.Joystick(0).get_button(3):
+                print("tri")
+                #queue.put("TRIANGULO")
+
+        #Se reconoce el movimiento con la funcion JOYHATMOTION (flechitas)
+        if event.type == pygame.JOYHATMOTION:
+            print("2if")
+            x, y = event.value
+            #Reconocer qué flecha es.
+            #Izquierda-Derecha
+            if (x == 1):
+                #queue.put("DERECHA")
+                print("de")
+            elif (x == -1):
+                #queue.put("IZQUIERDA")
+                print("izq")
+            #Arriba-Abajo
+            elif (y == 1):
+                #queue.put("ARRIBA")
+                print("arrib")
+            elif (y == -1):
+                #queue.put("ABAJO")
+                print("abaj")
+            else:
+                #print("Centro")
+                pass
+                
+
         # Simular un retardo para la demostración
         #time.sleep(0.01)
     
