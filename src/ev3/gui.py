@@ -6,8 +6,12 @@ import multiprocessing
 
 def mandar_input(socket_p, mensaje):
     
-    socket_p.sendall(mensaje)    
-    return
+    
+    if (socket_p == None):
+        return
+    else:
+        socket_p.sendall(mensaje)  
+        return
 
 def gui_process(queue):
 
@@ -18,11 +22,13 @@ def gui_process(queue):
             # Verifica si hay algún mensaje en la cola y se ejecuta la funcion para mandarlo al servidor
             message = queue.get_nowait()
 
+            #Mando conectado/desconectado
             if (message == "Connected"):
                 print("conec-Tkinter")
             elif (message == "Disconnected"):
                 print("Disco-Tkinter")
             else:
+                visualizar_botones_mando(message)
                 mandar_input(socket, message.encode())
 
         except multiprocessing.queues.Empty:
@@ -33,45 +39,40 @@ def gui_process(queue):
     def crear_socket(ip_usuario_p):
 
         global socket
-        #boton.config(text="Conectando...", fg="#ffea00", bg="#ffffff")
-
-        #Se reconoce si el socket está creado, si NO está creado, se ingresa al if, sino quiere decir que quiere cortar conexión, así que se modifica la variable socket
-        if (socket == None):
-            try:
-                
-                print("Creando socket")
-                #Se crea el socket para conectarlo con el servidor y se guarda.
-                socket = client.retornar_socket(ip_usuario_p)
-                print("Socket creado")
-
-                #Se manda las teclas del teclado si es que son presionadas
-                ventana_principal.bind("<Key>", lambda event: mandar_input(socket, event.keysym.encode()))
-
-                #
-                boton_conexion.config(text="Desconectar", fg="#009634", bg="#000000")
-
-            except (TimeoutError, ConnectionRefusedError) as error:
-                #
-                boton_conexion.config(text="Volver a\nconectar.", fg="#800000", bg="#ff6363")
-
-                #Se imprime el error y se desactiva la función para que reconozca las teclas del teclado.
-                print("Error en la conexión con el EV3, vuelva a intentarlo.")
-                ventana_principal.unbind("<Key>")
+        try:
             
-        else:
-            client.cortar_conexion(socket)
-            socket = None
+            print("Creando socket")
+            #Se crea el socket para conectarlo con el servidor y se guarda.
+            socket = client.retornar_socket(ip_usuario_p)
+            print("Socket creado")
+
+            #Se manda las teclas del teclado si es que son presionadas
+            ventana_principal.bind("<Key>", lambda event: mandar_input(socket, event.keysym.encode()))
+
+            #
+            boton_conexion.config(text="Desconectar", fg="#009634", bg="#000000")
+
+        except (TimeoutError, ConnectionRefusedError) as error:
+            #
+            boton_conexion.config(text="Volver a\nconectar.", fg="#800000", bg="#ff6363")
+
+            #Se imprime el error y se desactiva la función para que reconozca las teclas del teclado.
+            print("Error en la conexión con el EV3, vuelva a intentarlo.")
             ventana_principal.unbind("<Key>")
-            boton_conexion.config(text="Conectar", fg="#009634", bg="#D5FFE4")
+
 
     def cambiar_gui_input(event):
 
         #Respectivamente, se activa y desactiva los botones/labels y relacionados a el input elegido del usuario
         if (combobox_input.get() == "Teclado"): 
-            #Se desactivan los botones del mando
-            label_mando.place_forget()
-            boton_conectar_mando.place_forget()
 
+            #Se desactivan los botones del mando
+            canvas.itemconfigure(canva_fondo_mando, state='hidden')
+            canvas.itemconfigure(canva_mando_xbox, state='hidden')
+            boton_conectar_mando.place_forget()
+            
+
+            canvas.itemconfigure(canva_fondo_teclado, state='normal')
             #Label
             label_movimiento_ev3.place(x=80, y=170 + mover_conjunto)
             label_cortar_conexion.place(x=375, y=170 + mover_conjunto)
@@ -101,6 +102,7 @@ def gui_process(queue):
             
         else:
             #Teclado olvidar
+            canvas.itemconfigure(canva_fondo_teclado, state='hidden')
             #Label
             label_movimiento_ev3.place_forget()
             label_cortar_conexion.place_forget()
@@ -124,7 +126,8 @@ def gui_process(queue):
             boton_conexion.place_forget()
 
             #Mando
-            label_mando.place(x=250, y=210)
+            canvas.itemconfig(canva_fondo_mando, state='normal')
+            canvas.itemconfigure(canva_mando_xbox, state='normal')
 
             label_sensor.place(x=85, y=20)
             label_objeto_detectado.place(x=95, y=65)
@@ -133,30 +136,63 @@ def gui_process(queue):
             boton_conexion.place(x=812, y=70)
 
             boton_conectar_mando.place(x=419, y=570)
+            
+        ventana_principal.focus()
+            
 
     def ventana_ingresar_ip():
-        #Ventana
-        ventana_ingresar_ip = Toplevel(ventana_principal)
-        ventana_ingresar_ip.title("IP del EV3")
-        ventana_ingresar_ip.geometry("300x300")
-        ventana_ingresar_ip.config(bg="#471717")
-        ventana_ingresar_ip.resizable(0, 0)
+        global socket
 
-        #Variables
-        fuente_ventana_secundaria = font.Font(family="Arial", size=15, weight="bold")
+        if (socket == None):
+            #Ventana
+            ventana_ingresar_ip = Toplevel(ventana_principal)
+            ventana_ingresar_ip.title("IP del EV3")
+            ventana_ingresar_ip.geometry("300x300")
+            ventana_ingresar_ip.config(bg="#471717")
+            ventana_ingresar_ip.resizable(0, 0)
 
-        #Widgets
-        label_ingresar_ip = Label(ventana_ingresar_ip, text="Ingrese la IP del EV3", font=fuente_ventana_secundaria, bg=fondo_color_label, fg=letras_color_label)
-        label_ingresar_ip.place(x=50, y=60)
+            #Variables
+            fuente_ventana_secundaria = font.Font(family="Arial", size=15, weight="bold")
 
-        ip_usuario = Entry(ventana_ingresar_ip, width=25, font=("Arial", 12), justify="center")
-        ip_usuario.place(x=35, y=120)
+            #Widgets
+            label_ingresar_ip = Label(ventana_ingresar_ip, text="Ingrese la IP del EV3", font=fuente_ventana_secundaria, bg=fondo_color_label, fg=letras_color_label)
+            label_ingresar_ip.place(x=50, y=60)
 
-        boton_aceptar = Button(ventana_ingresar_ip, text="Aceptar", fg="#009634", bg="#D5FFE4", height=2, width=10, font=("Arial", 9, "bold"), command=lambda: crear_socket(ip_usuario.get()))
-        boton_aceptar.place(x=50, y=180)
+            ip_usuario = Entry(ventana_ingresar_ip, width=25, font=("Arial", 12), justify="center")
+            ip_usuario.place(x=35, y=120)
 
-        boton_salir = Button(ventana_ingresar_ip, text="Salir", fg="#D70000", bg="#FFDDDD", height=2, width=10, font=("Arial", 9, "bold"), command=lambda: ventana_ingresar_ip.destroy())
-        boton_salir.place(x=175, y=180)
+            boton_aceptar = Button(ventana_ingresar_ip, text="Aceptar", fg="#009634", bg="#D5FFE4", height=2, width=10, font=("Arial", 9, "bold"), command=lambda: crear_socket(ip_usuario.get()))
+            boton_aceptar.place(x=50, y=180)
+
+            boton_salir = Button(ventana_ingresar_ip, text="Salir", fg="#D70000", bg="#FFDDDD", height=2, width=10, font=("Arial", 9, "bold"), command=lambda: ventana_ingresar_ip.destroy())
+            boton_salir.place(x=175, y=180)
+        else:
+            mandar_input(socket, "q".encode())
+            socket = None
+            ventana_principal.unbind("<Key>")
+            boton_conexion.config(text="Conectar", fg="#009634", bg="#D5FFE4")
+
+    def visualizar_botones_mando(boton_p):
+
+        # Botones principales (Circulo, equis, etc)
+        if (boton_p == "Up"):
+            pass
+        elif (boton_p == "Down"):
+            pass
+        elif (boton_p == "Left"):
+            pass
+        elif (boton_p == "Right"):
+            pass
+
+        # Botones de movimiento (flechitas)
+        elif (boton_p == "w"):
+            pass
+        elif (boton_p == "s"):
+            pass
+        elif (boton_p == "a"):
+            pass
+        elif (boton_p == "d"):
+            pass
 
 
 
@@ -182,23 +218,49 @@ def gui_process(queue):
     ventana_principal.config(bg="#471717")
     ventana_principal.resizable(0, 0)
 
-    # Cargar el archivo de imagen desde el disco.
+    # Imagenes
     icono = PhotoImage(file="./data/images/CARA.png")
     logo = PhotoImage(file="./data/images/prueba1.png")
     
+
+    fondo_teclado = PhotoImage(file="./data/images/Teclado.png")
+    fondo_mando = PhotoImage(file="./data/images/Fondo_Mando.png")
+    
+    mando_xbox = PhotoImage(file="./data/images/Mando.png")
+
+    flecha_arriba_presionada = PhotoImage(file="./data/images/F-Arriba.png")
+    #flecha_abajo_presionada = PhotoImage(file="./data/images/")
+    #flecha_derecha_presionada = PhotoImage(file="./data/images/")
+    #flecha_izquierda_presionada = PhotoImage(file="./data/images/")
+
+    # Se le llama (arriba, abajo, etc), ya que la mayoria de mandos son distintos.
+    #boton_arriba_presionada = PhotoImage(file="./data/images/")
+    #boton_abajo_presionada = PhotoImage(file="./data/images/")
+    #boton_derecha_presionada = PhotoImage(file="./data/images/")
+    #boton_izquierda_presionada = PhotoImage(file="./data/images/")
+
     # Establecerlo como ícono de la ventana.
     ventana_principal.iconphoto(True, icono)
 
 
 
-    #canvas = Canvas(ventana_principal, width=1000, height=700)
-    #canvas.pack()
-    #canvas.create_rectangle(0, 0, 1000, 700, fill="#471717")
+    #Canva y fondos
+    canvas = Canvas(ventana_principal, width=1000, height=700)
+    canvas.pack()
 
+    canva_fondo_teclado = canvas.create_image(500, 355, image=fondo_teclado)
+    canva_fondo_mando = canvas.create_image(500, 355, image=fondo_mando)    
+    canvas.itemconfigure(canva_fondo_mando, state='hidden')
 
+    canvas.create_rectangle(0, 0, 1000, 700, fill=fondo_color_label, stipple="gray75", outline="")
 
+    canva_mando_xbox = canvas.create_image(500, 355, image=mando_xbox)
+    canvas.itemconfigure(canva_mando_xbox, state='hidden')
 
-
+    #Botones presionados (coloreados)
+    canva_flecha_arriba = canvas.create_image(425, 330, image=flecha_arriba_presionada)
+    #canvas.itemconfigure(canva_flecha_arriba, state='hidden')
+    
     #
     fuente = font.Font(family="Arial", size=20, weight="bold")
 
@@ -227,33 +289,33 @@ def gui_process(queue):
 
 
     #Botones moverse
-    boton_w = Button(ventana_principal, text="W", fg=letras_color_botones, bg=fondo_color_botones, height=2, width=4, font=("Arial", 10, "bold"))
+    boton_w = Button(ventana_principal, text="W", fg=letras_color_botones, bg=fondo_color_botones, height=2, width=4, font=("Arial", 10, "bold"), command=lambda: mandar_input(socket, "w".encode()))
     boton_w.place(x=150, y=250 + mover_conjunto)
 
-    boton_s = Button(ventana_principal, text="S", fg=letras_color_botones, bg=fondo_color_botones, height=2, width=4, font=("Arial", 10, "bold"))
+    boton_s = Button(ventana_principal, text="S", fg=letras_color_botones, bg=fondo_color_botones, height=2, width=4, font=("Arial", 10, "bold"), command=lambda: mandar_input(socket, "s".encode()))
     boton_s.place(x=150, y=300 + mover_conjunto)
 
-    boton_a = Button(ventana_principal, text="A", fg=letras_color_botones, bg=fondo_color_botones, height=2, width=4, font=("Arial", 10, "bold"))
+    boton_a = Button(ventana_principal, text="A", fg=letras_color_botones, bg=fondo_color_botones, height=2, width=4, font=("Arial", 10, "bold"), command=lambda: mandar_input(socket, "a".encode()))
     boton_a.place(x=100, y=300 + mover_conjunto)
 
-    boton_d = Button(ventana_principal, text="D", fg=letras_color_botones, bg=fondo_color_botones, height=2, width=4, font=("Arial", 10, "bold"))
+    boton_d = Button(ventana_principal, text="D", fg=letras_color_botones, bg=fondo_color_botones, height=2, width=4, font=("Arial", 10, "bold"), command=lambda: mandar_input(socket, "d".encode()))
     boton_d.place(x=200, y=300 + mover_conjunto)
 
-    #Boton salir
-    boton_q = Button(ventana_principal, text="Q", fg=letras_color_botones, bg=fondo_color_botones, height=2, width=4, font=("Arial", 10, "bold"))
+    #Boton cortar conexión
+    boton_q = Button(ventana_principal, text="Q", fg=letras_color_botones, bg=fondo_color_botones, height=2, width=4, font=("Arial", 10, "bold"), command=lambda: mandar_input(socket, "q".encode()))
     boton_q.place(x=490, y=270 + mover_conjunto)
 
     #Botones garra
-    boton_flecha_arriba = Button(ventana_principal, text="↑", fg=letras_color_botones, bg=fondo_color_botones, height=2, width=4, font=("Arial", 10, "bold"))
+    boton_flecha_arriba = Button(ventana_principal, text="↑", fg=letras_color_botones, bg=fondo_color_botones, height=2, width=4, font=("Arial", 10, "bold"), command=lambda: mandar_input(socket, "Up".encode()))
     boton_flecha_arriba.place(x=840, y=250 + mover_conjunto)
 
-    boton_flecha_abajo = Button(ventana_principal, text="↓", fg=letras_color_botones, bg=fondo_color_botones, height=2, width=4, font=("Arial", 10, "bold"))
+    boton_flecha_abajo = Button(ventana_principal, text="↓", fg=letras_color_botones, bg=fondo_color_botones, height=2, width=4, font=("Arial", 10, "bold"), command=lambda: mandar_input(socket, "Down".encode()))
     boton_flecha_abajo.place(x=840, y=300 + mover_conjunto)
 
-    boton_flecha_izquierda = Button(ventana_principal, text="←", fg=letras_color_botones, bg=fondo_color_botones, height=2, width=4, font=("Arial", 10, "bold"))
+    boton_flecha_izquierda = Button(ventana_principal, text="←", fg=letras_color_botones, bg=fondo_color_botones, height=2, width=4, font=("Arial", 10, "bold"), command=lambda: mandar_input(socket, "Left".encode()))
     boton_flecha_izquierda.place(x=790, y=300 + mover_conjunto)
 
-    boton_flecha_derecha = Button(ventana_principal, text="→", fg=letras_color_botones, bg=fondo_color_botones, height=2, width=4, font=("Arial", 10, "bold"))
+    boton_flecha_derecha = Button(ventana_principal, text="→", fg=letras_color_botones, bg=fondo_color_botones, height=2, width=4, font=("Arial", 10, "bold"), command=lambda: mandar_input(socket, "Right".encode()))
     boton_flecha_derecha.place(x=890, y=300 + mover_conjunto)
 
     boton_conexion = Button(ventana_principal, text="Conectar", fg="#009634", bg="#D5FFE4", height=2, width=10, font=("Arial", 9, "bold"), command=lambda: ventana_ingresar_ip())
@@ -264,8 +326,6 @@ def gui_process(queue):
 
 
     #Mando
-    imagen_mando = PhotoImage(file="./data/images/Mando.png")
-    label_mando = Label(ventana_principal, image=imagen_mando, bg=fondo_color_label)
     boton_conectar_mando = Button(ventana_principal, text="Conectar mando", fg="#009634", bg="#D5FFE4", font=("Arial", 11, "bold"), height=2, width=16)
     
 

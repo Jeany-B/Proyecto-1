@@ -17,9 +17,8 @@ def pygame_process(queue):
                     running = False
                     break
 
-
     joystick = pygame.joystick.Joystick(0)
-    
+
     running = True
     while running:
         event = pygame.event.wait()
