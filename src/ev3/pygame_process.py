@@ -37,7 +37,6 @@ def pygame_process(queue):
         
         #Se reconoce el movimiento con la funcion JOYHBUTTONDOWN (botones principales)
         if event.type == pygame.JOYBUTTONDOWN:
-            print("1if")
             if pygame.joystick.Joystick(0).get_button(0):
                 print("x")
                 #queue.put("EQUIS")
@@ -56,7 +55,6 @@ def pygame_process(queue):
 
         #Se reconoce el movimiento con la funcion JOYHATMOTION (flechitas)
         if event.type == pygame.JOYHATMOTION:
-            print("2if")
             x, y = event.value
             #Reconocer qué flecha es.
             #Izquierda-Derecha
@@ -77,6 +75,13 @@ def pygame_process(queue):
                 #print("Centro")
                 pass
                 
+        # Movimiento a través de los sticks
+        if event.type == pygame.JOYAXISMOTION:
+            x = joystick.get_axis(0)
+            y = joystick.get_axis(1)
+
+            # queue.put(f"Axis {x} {y}")
+            print(f"x: {x}, y: {y}")
 
         # Simular un retardo para la demostración
         #time.sleep(0.01)

@@ -2,7 +2,7 @@
 # encoding=utf-8
 
 import socket
-#import library as lib
+import library as lib
 
 HOST = ""
 PORT = 8080
@@ -41,6 +41,12 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         elif key == 'space':
             #lib.hablar()
             print("space")
+
+        # Movimiento con los sticks
+        if "Axis" in key:
+            valores_axis = key.split()
+            lib.movimiento_joystick(float(valores_axis[1]),
+                                    float(valores_axis[2]))
 
         #Garra
         elif key == "Up":
