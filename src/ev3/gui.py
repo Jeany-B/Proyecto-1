@@ -3,6 +3,7 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import font
 import multiprocessing
+import time
 
 def mandar_input(socket_p, mensaje):
     
@@ -23,12 +24,15 @@ def gui_process(queue):
             message = queue.get_nowait()
 
             #Mando conectado/desconectado
-            if (message == "Connected"):
-                print("conec-Tkinter")
-            elif (message == "Disconnected"):
-                print("Disco-Tkinter")
+            if (message == "Mando conectado"):
+                
+                ConectarMando("Mando conectado")
+            elif (message == "Mando desconectado"):
+                
+                ConectarMando("Mando desconectado")
             else:
-                visualizar_botones_mando(message)
+                #print(message)
+                #visualizar_botones_mando(message)
                 mandar_input(socket, message.encode())
 
         except multiprocessing.queues.Empty:
@@ -172,12 +176,28 @@ def gui_process(queue):
             ventana_principal.unbind("<Key>")
             boton_conexion.config(text="Conectar", fg="#009634", bg="#D5FFE4")
 
+    def ConectarMando(message_p):
+        
+        if message_p == "Mando conectado":
+            boton_conectar_mando.config(text="Mando conectado", fg="#009634", bg="#D5FFE4")
+        elif message_p == "Mando desconectado":
+            boton_conectar_mando.config(text="Mando desconectado", fg="#D70000", bg="#FFDDDD")
+            
+        
+
+
+
     def visualizar_botones_mando(boton_p):
 
         # Botones principales (Circulo, equis, etc)
         if (boton_p == "Up"):
+            #canvas.itemconfigure(canva_flecha_arriba, state='normal')
+            #time.sleep(1)
+            #canvas.itemconfigure(canva_flecha_arriba, state='hidden')
             pass
-        elif (boton_p == "Down"):
+        elif (boton_p == "Si-Down"):
+            pass
+        elif (boton_p == "No-Down"):
             pass
         elif (boton_p == "Left"):
             pass
@@ -186,7 +206,11 @@ def gui_process(queue):
 
         # Botones de movimiento (flechitas)
         elif (boton_p == "w"):
-            pass
+            print("b")
+            canvas.itemconfigure(canva_flecha_arriba, state='normal')
+            time.sleep(1)
+            canvas.itemconfigure(canva_flecha_arriba, state='hidden')
+            
         elif (boton_p == "s"):
             pass
         elif (boton_p == "a"):
@@ -213,7 +237,7 @@ def gui_process(queue):
 
     #Ventana Principal
     ventana_principal = Tk()
-    ventana_principal.title("Ada.")
+    ventana_principal.title("Ada")
     ventana_principal.geometry("1000x700")
     ventana_principal.config(bg="#471717")
     ventana_principal.resizable(0, 0)
@@ -259,7 +283,7 @@ def gui_process(queue):
 
     #Botones presionados (coloreados)
     canva_flecha_arriba = canvas.create_image(425, 330, image=flecha_arriba_presionada)
-    #canvas.itemconfigure(canva_flecha_arriba, state='hidden')
+    canvas.itemconfigure(canva_flecha_arriba, state='hidden')
     
     #
     fuente = font.Font(family="Arial", size=20, weight="bold")
@@ -326,7 +350,7 @@ def gui_process(queue):
 
 
     #Mando
-    boton_conectar_mando = Button(ventana_principal, text="Conectar mando", fg="#009634", bg="#D5FFE4", font=("Arial", 11, "bold"), height=2, width=16)
+    boton_conectar_mando = Button(ventana_principal, text="Buscando mando...", fg="#6c6e01", bg="#fdff6e", font=("Arial", 11, "bold"), height=2, width=16)
     
 
     #ComboBox
