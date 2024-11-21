@@ -16,4 +16,6 @@ if __name__ == "__main__":
 
     # Esperar a que ambos procesos terminen
     tkinter_p.join()
+
+    pygame_p.terminate()
     pygame_p.join()
