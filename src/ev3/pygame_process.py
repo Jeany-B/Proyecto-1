@@ -46,10 +46,7 @@ def pygame_process(queue):
         
         #Se reconoce el movimiento con la funcion JOYHBUTTONDOWN (botones principales)
         if event.type == pygame.JOYBUTTONDOWN:
-<<<<<<< HEAD
             
-=======
->>>>>>> 176b9ded75acdd6803a88b228c9ba140ddb665b5
             if pygame.joystick.Joystick(0).get_button(0):
                 print("x")
                 queue.put("Si-Down")
@@ -78,7 +75,6 @@ def pygame_process(queue):
 
         #Se reconoce el movimiento con la funcion JOYHATMOTION (flechitas)
         if event.type == pygame.JOYHATMOTION:
-<<<<<<< HEAD
             posicion_actual = joystick.get_hat(0)
 
             # Detectar cuando se presiona una dirección en el D-pad
@@ -93,8 +89,6 @@ def pygame_process(queue):
             posicion_anterior = posicion_actual
 
 
-=======
->>>>>>> 176b9ded75acdd6803a88b228c9ba140ddb665b5
             x, y = event.value
             #Reconocer qué flecha es.
             #Izquierda-Derecha
