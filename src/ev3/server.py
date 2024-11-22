@@ -25,19 +25,36 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         data = client.recv(16)
         key = data.decode()
 
+        print(key)
         #Movimiento
-        if key == 'w':
-            #lib.avanzar()
-            print("w")
-        elif key == 'a':
-            #lib.girar_izquierda()
+        if key == 'w-presionada':
+            lib.avanzar()
+
+        elif key == "w-soltada":
+            lib.frenar()
+
+        elif key == 'a-presionada':
+            lib.girar_izquierda()
             print("a")
-        elif key == 's':
-            #lib.retroceder()
+        elif key == 'a-soltada':
+            lib.frenar()
+            print("a")
+
+        elif key == 's-presionada':
+            lib.retroceder()
             print("s")
-        elif key == 'd':
-            #lib.girar_derecha()
+        elif key == 's-soltada':
+            lib.frenar()
+            print("s")
+            
+        elif key == 'd-presionada':
+            lib.girar_derecha()
             print("d")
+
+        elif key == 'd-soltada':
+            lib.frenar()
+            print("d")
+             
         elif key == 'space':
             #lib.hablar()
             print("space")
@@ -45,13 +62,18 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         # Movimiento con los sticks
         if "Axis" in key:
             valores_axis = key.split()
-            lib.movimiento_joystick(float(valores_axis[1]),
-                                    float(valores_axis[2]))
+            print(valores_axis)
+            lib.movimiento_joystick(float(valores_axis[1]), float(valores_axis[2]))
 
         #Garra
-        elif key == "Up":
+        elif key == "up-presionado":
+            lib.subir_garra()
+            print("Up")
+
+        elif key == "up-soltado":
             #lib.avanzar()
             print("Up")
+
         elif key == "Down":
             #lib.girar_izquierda()
             print("Down")
