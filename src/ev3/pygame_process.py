@@ -49,29 +49,36 @@ def pygame_process(queue):
             
             if pygame.joystick.Joystick(0).get_button(0):
                 print("x")
-                queue.put("Si-Down")
+                queue.put("down-presionado")
 
             elif pygame.joystick.Joystick(0).get_button(1):
                 print("o")
-                queue.put("Right")
+                queue.put("right-presionado")
 
             elif pygame.joystick.Joystick(0).get_button(2):
                 print("cua")
-                queue.put("Left")
+                queue.put("left-presionado")
 
             elif pygame.joystick.Joystick(0).get_button(3):
                 print("tri")
-                queue.put("Up")
+                queue.put("up-presionado")
         
         if event.type == pygame.JOYBUTTONUP:
             if event.button == 0:
                 print("No-Down")
+                queue.put("down-soltado")
+
             if event.button == 1:
                 print("Se dejó de presionar o")
+                queue.put("right-soltado")
+                
             if event.button == 2:
                 print("Se dejó de presionar cua")
+                queue.put("left-soltado")
+
             if event.button == 3:
                 print("Se dejó de presionar tri")
+                queue.put("up-soltado")
 
         #Se reconoce el movimiento con la funcion JOYHATMOTION (flechitas)
         if event.type == pygame.JOYHATMOTION:
@@ -79,35 +86,47 @@ def pygame_process(queue):
 
             # Detectar cuando se presiona una dirección en el D-pad
             if posicion_actual != (0, 0) and posicion_anterior == (0, 0):
-                print(f"Se presionó el D-pad en la dirección: {posicion_actual}")
+                if (posicion_actual == (0,1)):
+                    print("w-presionada")
+                    queue.put("w-presionada")
+
+                elif (posicion_actual == (0, -1)):
+                    print("s-presionado")
+                    queue.put("s-presionada")
+
+                elif (posicion_actual == (1,0)):
+                    print("d-presionada")
+                    queue.put("d-presionada")
+
+                elif (posicion_actual == (-1,0)):
+                    print("a-presionada")
+                    queue.put("a-presionada")
+
+                #print(f"Se presionó el D-pad en la dirección: {posicion_actual}")
 
             # Detectar cuando se suelta una dirección en el D-pad
             elif posicion_actual == (0, 0) and posicion_anterior != (0, 0):
-                print(f"Se soltó el D-pad de la dirección: {posicion_anterior}")
+                if (posicion_anterior == (0,1)):
+                    print("w-soltada")
+                    queue.put("w-soltada")
+
+                elif (posicion_anterior == (0, -1)):
+                    print("s-soltada")
+                    queue.put("s-soltada")
+
+                elif (posicion_anterior == (1,0)):
+                    print("d-soltada")
+                    queue.put("d-soltada")
+
+                elif (posicion_anterior == (-1,0)):
+                    print("a-soltada")
+                    queue.put("a-soltada")
+
+                #(f"Se soltó el D-pad de la dirección: {posicion_anterior}")
 
             # Actualizar la posición anterior del D-pad
             posicion_anterior = posicion_actual
 
-
-            x, y = event.value
-            #Reconocer qué flecha es.
-            #Izquierda-Derecha
-            if (x == 1):
-                queue.put("Si-d")
-                print("d")
-            elif (x == -1):
-                queue.put("a")
-                print("a")
-            #Arriba-Abajo
-            elif (y == 1):
-                queue.put("w")
-                print("w")
-            elif (y == -1):
-                queue.put("s")
-                print("s")
-            else:
-                #queue.put()
-                pass
 
                 
         # Movimiento a través de los sticks
@@ -115,8 +134,10 @@ def pygame_process(queue):
             x = joystick.get_axis(0)
             y = joystick.get_axis(1)
 
-            # queue.put(f"Axis {x} {y}")
-            print(f"x: {x}, y: {y}")
+            if (x >= 0.1 and y >= 0.1):
+                print(f"Axis {x} {y}")
+                #queue.put(f"Axis {x} {y}")
+
 
         # Simular un retardo para la demostración
         #time.sleep(0.01)
