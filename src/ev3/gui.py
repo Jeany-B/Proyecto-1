@@ -14,6 +14,12 @@ def mandar_input(socket_p, mensaje):
         socket_p.sendall(mensaje)  
         return
 
+# def recibir_sensor(socket_s):
+#     while True:
+#         data = socket_s.recv(8)
+#         key = data.decode()
+#         print(key)
+
 def gui_process(queue):
 
     #Funciones
@@ -43,12 +49,16 @@ def gui_process(queue):
     def crear_socket(ip_usuario_p):
 
         global socket
+        global proceso_sensor
         try:
             
             print("Creando socket")
             #Se crea el socket para conectarlo con el servidor y se guarda.
             socket = client.retornar_socket(ip_usuario_p)
             print("Socket creado")
+
+            proceso_sensor = multiprocessing.Process(target=recibir_sensor, args=(socket,))
+            proceso_sensor.start()
 
             #Se manda las teclas del teclado si es que son presionadas
             ventana_principal.bind("<KeyPress>", lambda event:
@@ -67,6 +77,9 @@ def gui_process(queue):
             #Se imprime el error y se desactiva la función para que reconozca las teclas del teclado.
             print("Error en la conexión con el EV3, vuelva a intentarlo.")
             ventana_principal.unbind("<Key>")
+            proceso_sensor.join()
+
+
 
 
     def cambiar_gui_input(event):
@@ -424,4 +437,3 @@ if __name__ == "__main__":
 
     # Crear el proceso de tkinter
     gui_process(queue)
-
