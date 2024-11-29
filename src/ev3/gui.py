@@ -6,7 +6,7 @@ import multiprocessing
 import time
 
 def mandar_input(socket_p, mensaje):
-    
+    print(mensaje)
     
     if (socket_p == None):
         return
@@ -32,7 +32,7 @@ def gui_process(queue):
                 ConectarMando("Mando desconectado")
             else:
                 #print(message)
-                #visualizar_botones_mando(message)
+                visualizar_botones_mando(message)
                 mandar_input(socket, message.encode())
 
         except multiprocessing.queues.Empty:
@@ -51,7 +51,8 @@ def gui_process(queue):
             print("Socket creado")
 
             #Se manda las teclas del teclado si es que son presionadas
-            ventana_principal.bind("<Key>", lambda event: mandar_input(socket, event.keysym.encode()))
+            ventana_principal.bind("<KeyPress>", lambda event: mandar_input(socket, (event.keysym+"-presionada").encode()))
+            ventana_principal.bind("<KeyRelease>", lambda event: mandar_input(socket, (event.keysym+"-soltada").encode()))
 
             #
             boton_conexion.config(text="Desconectar", fg="#009634", bg="#000000")
@@ -188,36 +189,57 @@ def gui_process(queue):
 
 
     def visualizar_botones_mando(boton_p):
+        
+        if (combobox_input.get() == "Teclado"): 
+            return
 
         # Botones principales (Circulo, equis, etc)
-        if (boton_p == "Up"):
-            #canvas.itemconfigure(canva_flecha_arriba, state='normal')
-            #time.sleep(1)
-            #canvas.itemconfigure(canva_flecha_arriba, state='hidden')
-            pass
-        elif (boton_p == "Si-Down"):
-            pass
-        elif (boton_p == "No-Down"):
-            pass
-        elif (boton_p == "Left"):
-            pass
-        elif (boton_p == "Right"):
-            pass
+        if (boton_p == "Up-presionada"):
+            canvas.itemconfigure(canva_boton_arriba, state='normal')
+            
+
+        elif (boton_p == "Up-soltada"):
+            canvas.itemconfigure(canva_boton_arriba, state='hidden')
+            
+
+        elif (boton_p == "Down-presionada"):
+            canvas.itemconfigure(canva_boton_abajo, state='normal')
+            
+        elif (boton_p == "Down-soltada"):
+            canvas.itemconfigure(canva_boton_abajo, state='hidden')
+            
+        elif (boton_p == "Right-presionada"):
+            canvas.itemconfigure(canva_boton_derecha, state='normal')
+            
+        elif (boton_p == "Right-soltada"):
+            canvas.itemconfigure(canva_boton_derecha, state='hidden')
+
+        elif (boton_p == "Left-presionada"):
+            canvas.itemconfigure(canva_boton_izquierda, state='normal')
+        elif (boton_p == "Left-soltada"):
+            canvas.itemconfigure(canva_boton_izquierda, state='hidden')
 
         # Botones de movimiento (flechitas)
-        elif (boton_p == "w"):
-            print("b")
+        if (boton_p == "w-presionada"):
             canvas.itemconfigure(canva_flecha_arriba, state='normal')
-            time.sleep(1)
-            canvas.itemconfigure(canva_flecha_arriba, state='hidden')
             
-        elif (boton_p == "s"):
-            pass
-        elif (boton_p == "a"):
-            pass
-        elif (boton_p == "d"):
-            pass
+        elif (boton_p == "w-soltada"):
+            canvas.itemconfigure(canva_flecha_arriba, state='hidden')
 
+        elif (boton_p == "s-presionada"):
+            canvas.itemconfigure(canva_flecha_abajo, state='normal')
+        elif (boton_p == "s-soltada"):
+            canvas.itemconfigure(canva_flecha_abajo, state='hidden')
+
+        elif (boton_p == "a-presionada"):
+            canvas.itemconfigure(canva_flecha_izquierda, state='normal')
+        elif (boton_p == "a-soltada"):
+            canvas.itemconfigure(canva_flecha_izquierda, state='hidden')
+
+        elif (boton_p == "d-presionada"):
+            canvas.itemconfigure(canva_flecha_derecha, state='normal')
+        elif (boton_p == "d-soltada"):
+            canvas.itemconfigure(canva_flecha_derecha, state='hidden')
 
 
 
@@ -253,15 +275,15 @@ def gui_process(queue):
     mando_xbox = PhotoImage(file="./data/images/Mando.png")
 
     flecha_arriba_presionada = PhotoImage(file="./data/images/F-Arriba.png")
-    #flecha_abajo_presionada = PhotoImage(file="./data/images/")
-    #flecha_derecha_presionada = PhotoImage(file="./data/images/")
-    #flecha_izquierda_presionada = PhotoImage(file="./data/images/")
+    flecha_abajo_presionada = PhotoImage(file="./data/images/F-Abajo.png")
+    flecha_derecha_presionada = PhotoImage(file="./data/images/F-Derecho.png")
+    flecha_izquierda_presionada = PhotoImage(file="./data/images/F-Izquierdo.png")
 
     # Se le llama (arriba, abajo, etc), ya que la mayoria de mandos son distintos.
-    #boton_arriba_presionada = PhotoImage(file="./data/images/")
-    #boton_abajo_presionada = PhotoImage(file="./data/images/")
-    #boton_derecha_presionada = PhotoImage(file="./data/images/")
-    #boton_izquierda_presionada = PhotoImage(file="./data/images/")
+    boton_arriba_presionada = PhotoImage(file="./data/images/F-Ye.png")
+    boton_abajo_presionada = PhotoImage(file="./data/images/F-A.png")
+    boton_derecha_presionada = PhotoImage(file="./data/images/F-B.png")
+    boton_izquierda_presionada = PhotoImage(file="./data/images/F-Equis.png")
 
     # Establecerlo como ícono de la ventana.
     ventana_principal.iconphoto(True, icono)
@@ -283,7 +305,26 @@ def gui_process(queue):
 
     #Botones presionados (coloreados)
     canva_flecha_arriba = canvas.create_image(425, 330, image=flecha_arriba_presionada)
+    canva_flecha_abajo = canvas.create_image(427, 386, image=flecha_abajo_presionada)
+    canva_flecha_derecha = canvas.create_image(455, 356, image=flecha_derecha_presionada)
+    canva_flecha_izquierda = canvas.create_image(396, 357, image=flecha_izquierda_presionada)
+
+    canva_boton_arriba = canvas.create_image(646, 230, image=boton_arriba_presionada)
+    canva_boton_abajo = canvas.create_image(646, 305, image=boton_abajo_presionada)
+    canva_boton_derecha = canvas.create_image(685, 266, image=boton_derecha_presionada)
+    canva_boton_izquierda = canvas.create_image(609, 265, image=boton_izquierda_presionada)
+
     canvas.itemconfigure(canva_flecha_arriba, state='hidden')
+    canvas.itemconfigure(canva_flecha_abajo, state='hidden')
+    canvas.itemconfigure(canva_flecha_derecha, state='hidden')
+    canvas.itemconfigure(canva_flecha_izquierda, state='hidden')
+
+    canvas.itemconfigure(canva_boton_arriba, state='hidden')
+    canvas.itemconfigure(canva_boton_abajo, state='hidden')
+    canvas.itemconfigure(canva_boton_derecha, state='hidden')
+    canvas.itemconfigure(canva_boton_izquierda, state='hidden')
+
+
     
     #
     fuente = font.Font(family="Arial", size=20, weight="bold")
@@ -366,6 +407,9 @@ def gui_process(queue):
 
     # Verificar la cola cada 100 ms
     ventana_principal.after(100, check_queue)
+
+    ventana_principal.bind("<KeyPress>", lambda event: mandar_input(socket, (event.keysym+"-presionada").encode()))
+    ventana_principal.bind("<KeyRelease>", lambda event: mandar_input(socket, (event.keysym+"-soltada").encode()))
 
     # Ejecutar la ventana
     ventana_principal.mainloop()
