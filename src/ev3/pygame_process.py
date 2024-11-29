@@ -48,37 +48,37 @@ def pygame_process(queue):
         if event.type == pygame.JOYBUTTONDOWN:
             
             if pygame.joystick.Joystick(0).get_button(0):
-                print("x")
-                queue.put("down-presionado")
+                print("Down-presionada")
+                queue.put("Down-presionada")
 
             elif pygame.joystick.Joystick(0).get_button(1):
-                print("o")
-                queue.put("right-presionado")
+                print("Right-presionada")
+                queue.put("Right-presionada")
 
             elif pygame.joystick.Joystick(0).get_button(2):
-                print("cua")
-                queue.put("left-presionado")
+                print("Left-presionada")
+                queue.put("Left-presionada")
 
             elif pygame.joystick.Joystick(0).get_button(3):
-                print("tri")
-                queue.put("up-presionado")
+                print("Up-presionada")
+                queue.put("Up-presionada")
         
         if event.type == pygame.JOYBUTTONUP:
             if event.button == 0:
-                print("No-Down")
-                queue.put("down-soltado")
+                print("Down-soltada")
+                queue.put("Down-soltada")
 
             if event.button == 1:
-                print("Se dejó de presionar o")
-                queue.put("right-soltado")
+                print("Right-soltada")
+                queue.put("Right-soltada")
                 
             if event.button == 2:
-                print("Se dejó de presionar cua")
-                queue.put("left-soltado")
+                print("Left-soltada")
+                queue.put("Left-soltada")
 
             if event.button == 3:
-                print("Se dejó de presionar tri")
-                queue.put("up-soltado")
+                print("Up-soltada")
+                queue.put("Up-soltada")
 
         #Se reconoce el movimiento con la funcion JOYHATMOTION (flechitas)
         if event.type == pygame.JOYHATMOTION:
