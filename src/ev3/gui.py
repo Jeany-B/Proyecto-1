@@ -52,10 +52,10 @@ def gui_process(queue):
 
             #Se manda las teclas del teclado si es que son presionadas
             ventana_principal.bind("<KeyPress>", lambda event:
-                mandar_input(socket, (event.keysym + "-presionado").encode()))
+                mandar_input(socket, (event.keysym + "-presionada").encode()))
 
             ventana_principal.bind("<KeyRelease>", lambda event:
-                mandar_input(socket, (event.keysym + "-soltado").encode()))
+                mandar_input(socket, (event.keysym + "-soltada").encode()))
 
             #
             boton_conexion.config(text="Desconectar", fg="#009634", bg="#000000")
@@ -370,7 +370,7 @@ def gui_process(queue):
     boton_d.place(x=200, y=300 + mover_conjunto)
 
     #Boton cortar conexión
-    boton_q = Button(ventana_principal, text="Q", fg=letras_color_botones, bg=fondo_color_botones, height=2, width=4, font=("Arial", 10, "bold"), command=lambda: mandar_input(socket, "q".encode()))
+    boton_q = Button(ventana_principal, text="Q", fg=letras_color_botones, bg=fondo_color_botones, height=2, width=4, font=("Arial", 10, "bold"), command=lambda: mandar_input(socket, "q-presionada".encode()))
     boton_q.place(x=490, y=270 + mover_conjunto)
 
     #Botones garra
