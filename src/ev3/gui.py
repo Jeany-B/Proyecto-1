@@ -51,8 +51,11 @@ def gui_process(queue):
             print("Socket creado")
 
             #Se manda las teclas del teclado si es que son presionadas
-            ventana_principal.bind("<KeyPress>", lambda event: mandar_input(socket, (event.keysym+"-presionada").encode()))
-            ventana_principal.bind("<KeyRelease>", lambda event: mandar_input(socket, (event.keysym+"-soltada").encode()))
+            ventana_principal.bind("<KeyPress>", lambda event:
+                mandar_input(socket, (event.keysym + "-presionado").encode()))
+
+            ventana_principal.bind("<KeyRelease>", lambda event:
+                mandar_input(socket, (event.keysym + "-soltado").encode()))
 
             #
             boton_conexion.config(text="Desconectar", fg="#009634", bg="#000000")

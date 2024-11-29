@@ -66,7 +66,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             lib.movimiento_joystick(float(valores_axis[1]), float(valores_axis[2]))
 
         #Garra
-        elif key == "up-presionado":
+        elif key == "Up":
             lib.subir_garra()
             print("Up")
 
@@ -75,14 +75,28 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             print("Up")
 
         elif key == "Down":
-            #lib.girar_izquierda()
+            lib.bajar_garra()
             print("Down")
         elif key == "Left":
-            #lib.girar_derecha()
+            lib.abrir_garra()
             print("Left")
         elif key == "Right":
-            #lib.retroceder()
+            lib.cerrar_garra()
             print("Right")
+
+        # elif key == "up-soltado":
+        #     #lib.avanzar()
+        #     print("Up")
+        #
+        # elif key == "Down":
+        #     #lib.girar_izquierda()
+        #     print("Down")
+        # elif key == "Left":
+        #     #lib.girar_derecha()
+        #     print("Left")
+        # elif key == "Right":
+        #     #lib.retroceder()
+        #     print("Right")
 
         #Salir (q and BOTON_CENTRAL_MANDO)
         elif key == 'q':
