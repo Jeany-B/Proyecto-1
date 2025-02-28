@@ -2,7 +2,7 @@
 # encoding=utf-8
 
 import socket
-import library as lib
+#import library as lib
 
 HOST = ""
 PORT = 8080
@@ -25,36 +25,39 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         data = client.recv(16)
         key = data.decode()
 
-        print(key)
+        #print(key)
         #Movimiento
         if key == 'w-presionada':
-            lib.avanzar()
+            print("w-presionada")
+            #lib.avanzar()
 
         elif key == "w-soltada":
-            lib.frenar()
+            print("w-soltada")
+            #lib.frenar()
 
         elif key == 'a-presionada':
-            lib.girar_izquierda()
-            print("a")
+            #lib.girar_izquierda()
+            print("a-presionada")
 
         elif key == 'a-soltada':
-            lib.frenar()
-            print("a")
+            #lib.frenar()
+            print("a-soltada")
 
         elif key == 's-presionada':
-            lib.retroceder()
-            print("s")
+            #lib.retroceder()
+            print("s-presionada")
+
         elif key == 's-soltada':
-            lib.frenar()
-            print("s")
+            #lib.frenar()
+            print("s-soltada")
             
         elif key == 'd-presionada':
-            lib.girar_derecha()
-            print("d")
+            #lib.girar_derecha()
+            print("d-presionada")
 
         elif key == 'd-soltada':
-            lib.frenar()
-            print("d")
+            #lib.frenar()
+            print("d-soltada")
              
         elif key == 'space':
             #lib.hablar()
@@ -63,19 +66,25 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 
         #Garra
         elif key == "Up-presionada":
-            lib.subir_garra()
+            print("Up-presionada")
+            #lib.subir_garra()
         elif key == "Down-presionada":
-            lib.bajar_garra()
+            print("Down-presionada")
+            #lib.bajar_garra()
 
         elif key == "Left-presionada":
-            lib.abrir_garra()
+            print("Left-presionada")
+            #lib.abrir_garra()
         elif key == "Right-presionada":
-            lib.cerrar_garra()
+            print("Right-presionada")
+            #lib.cerrar_garra()
 
         elif key == "Up-soltada":
-            lib.parar_garra()
+            print("Up-soltada")
+            #lib.parar_garra()
         elif key == "Down-soltada":
-            lib.parar_garra()
+            print("Down-soltada")
+            #lib.parar_garra()
         
 
         #Garra

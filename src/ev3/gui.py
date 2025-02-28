@@ -57,8 +57,8 @@ def gui_process(queue):
             socket = client.retornar_socket(ip_usuario_p)
             print("Socket creado")
 
-            proceso_sensor = multiprocessing.Process(target=recibir_sensor, args=(socket,))
-            proceso_sensor.start()
+            #proceso_sensor = multiprocessing.Process(target=recibir_sensor, args=(socket,))
+            #proceso_sensor.start()
 
             #Se manda las teclas del teclado si es que son presionadas
             ventana_principal.bind("<KeyPress>", lambda event:
@@ -188,9 +188,10 @@ def gui_process(queue):
             boton_salir = Button(ventana_ingresar_ip, text="Salir", fg="#D70000", bg="#FFDDDD", height=2, width=10, font=("Arial", 9, "bold"), command=lambda: ventana_ingresar_ip.destroy())
             boton_salir.place(x=175, y=180)
         else:
-            mandar_input(socket, "q".encode())
+            mandar_input(socket, "q-presionada".encode())
             socket = None
-            ventana_principal.unbind("<Key>")
+            ventana_principal.unbind("<KeyPress>")
+            ventana_principal.unbind("<KeyRelease>")
             boton_conexion.config(text="Conectar", fg="#009634", bg="#D5FFE4")
 
     def ConectarMando(message_p):
@@ -370,16 +371,24 @@ def gui_process(queue):
 
 
     #Botones moverse
-    boton_w = Button(ventana_principal, text="W", fg=letras_color_botones, bg=fondo_color_botones, height=2, width=4, font=("Arial", 10, "bold"), command=lambda: mandar_input(socket, "w".encode()))
+    boton_w = Button(ventana_principal, text="W", fg=letras_color_botones, bg=fondo_color_botones, height=2, width=4, font=("Arial", 10, "bold"))
+    boton_w.bind("<ButtonPress>", lambda event: mandar_input(socket, "w-presionada".encode()))
+    boton_w.bind("<ButtonRelease>", lambda event: mandar_input(socket, "w-soltada".encode()))
     boton_w.place(x=150, y=250 + mover_conjunto)
 
     boton_s = Button(ventana_principal, text="S", fg=letras_color_botones, bg=fondo_color_botones, height=2, width=4, font=("Arial", 10, "bold"), command=lambda: mandar_input(socket, "s".encode()))
+    boton_s.bind("<ButtonPress>", lambda event: mandar_input(socket, "s-presionada".encode()))
+    boton_s.bind("<ButtonRelease>", lambda event: mandar_input(socket, "s-soltada".encode()))
     boton_s.place(x=150, y=300 + mover_conjunto)
 
     boton_a = Button(ventana_principal, text="A", fg=letras_color_botones, bg=fondo_color_botones, height=2, width=4, font=("Arial", 10, "bold"), command=lambda: mandar_input(socket, "a".encode()))
+    boton_a.bind("<ButtonPress>", lambda event: mandar_input(socket, "a-presionada".encode()))
+    boton_a.bind("<ButtonRelease>", lambda event: mandar_input(socket, "a-soltada".encode()))
     boton_a.place(x=100, y=300 + mover_conjunto)
 
     boton_d = Button(ventana_principal, text="D", fg=letras_color_botones, bg=fondo_color_botones, height=2, width=4, font=("Arial", 10, "bold"), command=lambda: mandar_input(socket, "d".encode()))
+    boton_d.bind("<ButtonPress>", lambda event: mandar_input(socket, "d-presionada".encode()))
+    boton_d.bind("<ButtonRelease>", lambda event: mandar_input(socket, "d-soltada".encode()))
     boton_d.place(x=200, y=300 + mover_conjunto)
 
     #Boton cortar conexión
@@ -388,15 +397,23 @@ def gui_process(queue):
 
     #Botones garra
     boton_flecha_arriba = Button(ventana_principal, text="↑", fg=letras_color_botones, bg=fondo_color_botones, height=2, width=4, font=("Arial", 10, "bold"), command=lambda: mandar_input(socket, "Up".encode()))
+    boton_flecha_arriba.bind("<ButtonPress>", lambda event: mandar_input(socket, "Up-presionada".encode()))
+    boton_flecha_arriba.bind("<ButtonRelease>", lambda event: mandar_input(socket, "Up-soltada".encode()))
     boton_flecha_arriba.place(x=840, y=250 + mover_conjunto)
 
     boton_flecha_abajo = Button(ventana_principal, text="↓", fg=letras_color_botones, bg=fondo_color_botones, height=2, width=4, font=("Arial", 10, "bold"), command=lambda: mandar_input(socket, "Down".encode()))
+    boton_flecha_abajo.bind("<ButtonPress>", lambda event: mandar_input(socket, "Down-presionada".encode()))
+    boton_flecha_abajo.bind("<ButtonRelease>", lambda event: mandar_input(socket, "Down-soltada".encode()))
     boton_flecha_abajo.place(x=840, y=300 + mover_conjunto)
 
     boton_flecha_izquierda = Button(ventana_principal, text="←", fg=letras_color_botones, bg=fondo_color_botones, height=2, width=4, font=("Arial", 10, "bold"), command=lambda: mandar_input(socket, "Left".encode()))
+    boton_flecha_izquierda.bind("<ButtonPress>", lambda event: mandar_input(socket, "Left-presionada".encode()))
+    boton_flecha_izquierda.bind("<ButtonRelease>", lambda event: mandar_input(socket, "Left-soltada".encode()))
     boton_flecha_izquierda.place(x=790, y=300 + mover_conjunto)
 
     boton_flecha_derecha = Button(ventana_principal, text="→", fg=letras_color_botones, bg=fondo_color_botones, height=2, width=4, font=("Arial", 10, "bold"), command=lambda: mandar_input(socket, "Right".encode()))
+    boton_flecha_derecha.bind("<ButtonPress>", lambda event: mandar_input(socket, "Right-presionada".encode()))
+    boton_flecha_derecha.bind("<ButtonRelease>", lambda event: mandar_input(socket, "Right-soltada".encode()))
     boton_flecha_derecha.place(x=890, y=300 + mover_conjunto)
 
     boton_conexion = Button(ventana_principal, text="Conectar", fg="#009634", bg="#D5FFE4", height=2, width=10, font=("Arial", 9, "bold"), command=lambda: ventana_ingresar_ip())

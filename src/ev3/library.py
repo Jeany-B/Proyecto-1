@@ -15,8 +15,8 @@ JOYSTICK_DRIVE = MoveJoystick(OUTPUT_A, OUTPUT_B)
 
 MOTOR_IZQUIERDO = LargeMotor(OUTPUT_A)
 MOTOR_DERECHO = LargeMotor(OUTPUT_B)
-MOTOR_SUBIR_BAJAR = MediumMotor(OUTPUT_C)
-MOTOR_APRETAR_GARRA = MediumMotor(OUTPUT_D)
+#MOTOR_SUBIR_BAJAR = MediumMotor(OUTPUT_C)
+#MOTOR_APRETAR_GARRA = MediumMotor(OUTPUT_D)
 
 RAPIDO = SpeedPercent(100)
 MEDIO = SpeedPercent(50)
@@ -49,22 +49,27 @@ def girar_izquierda():
     #TANK_DRIVE.on_for_seconds(50, -50, 1)
 
 def parar_garra():
-    MOTOR_SUBIR_BAJAR.on(0,0)
-    MOTOR_APRETAR_GARRA.on(0,0)
+    pass
+    #MOTOR_SUBIR_BAJAR.on(0,0)
+    #MOTOR_APRETAR_GARRA.on(0,0)
 
 
 def subir_garra():
     print(MOTOR_SUBIR_BAJAR.position())
+    pass
     #MOTOR_SUBIR_BAJAR.on_for_seconds(-40, 1)
 
 def bajar_garra():
-    MOTOR_SUBIR_BAJAR.on_for_seconds(40, 1)
+    pass
+    #MOTOR_SUBIR_BAJAR.on_for_seconds(40, 1)
 
 def abrir_garra():
-    MOTOR_APRETAR_GARRA.on_for_seconds(10, 0.5)
+    pass
+    #MOTOR_APRETAR_GARRA.on_for_seconds(10, 0.5)
     
 def cerrar_garra():
-    MOTOR_APRETAR_GARRA.on_for_seconds(-10, 0.5)
+    pass
+    #MOTOR_APRETAR_GARRA.on_for_seconds(-10, 0.5)
 
 def hablar():
     sound = Sound()
